@@ -136,7 +136,7 @@ class CustomProvider extends Provider {
         ...
       }
 
-  The method mey return a promise resolving with the
+  The method may return a promise resolving with the
   expected return value.
 
   @param use {mixed}
@@ -151,16 +151,19 @@ class CustomProvider extends Provider {
   must be an array. Return an empty array if role is missing or
   no permission for the specified role.
 
-  Ex: ['permission1', 'permission2', ... ]
+  Ex: {
+    "role1": ["permissions", ...],
+    "role2": ["permissions", ...]
+  }
 
-  The method mey return a promise resolving with the
+  The method may return a promise resolving with the
   expected return value.
 
   @param role {mixed}
-  @return {Array<string>}
+  @return {Object<string,number>}
   */
   getPermissions(role) {
-    return [];   // TODO : implement stub
+    return {};   // TODO : implement stub
   }
 
   /**
@@ -168,16 +171,19 @@ class CustomProvider extends Provider {
   be an array. Return an empty array if role is missing or if no
   attributes for the specified role.
 
-  Ex: ['attribute1', 'attribute2', ... ]
+  Ex: {
+    "role1": ["attributes", ...],
+    "role2": ["attributes", ...]
+  }
 
-  The method mey return a promise resolving with the
+  The method may return a promise resolving with the
   expected return value.
 
   @param role {mixed}
-  @return {Array<string>}
+  @return {Object<string,number>}
   */
   getAttributes(role) {
-    return [];   // TODO : implement stub
+    return {};   // TODO : implement stub
   }
 
 }
@@ -203,9 +209,7 @@ class CompositeProvider extends Provider {
       this.json.getPermissions(role),
       this.custom.getPermissions(role)
     ]).then(function (permissionLists) {
-      var jsonPermissions = permissionLists[0] || [];
-      var customPermissions = permissionLists[1] || [];
-      return jsonPermissions.push.apply(jsonPermissions, customPermissions);
+      return Object.assign({}, permissionLists[0], permissionLists[1]);
     });
   }
 
